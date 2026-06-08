@@ -32,26 +32,7 @@
         },
       };
     </script>
-    <style>
-      html {
-        scroll-behavior: smooth;
-      }
-      .gradient-text {
-        background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        background-clip: text;
-      }
-      .card-hover {
-        transition:
-          box-shadow 0.2s ease,
-          transform 0.2s ease;
-      }
-      .card-hover:hover {
-        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
-        transform: translateY(-2px);
-      }
-    </style>
+    <link rel="stylesheet" href="assets/styles.css" />
   </head>
   <body class="font-sans text-gray-900 bg-white antialiased">
     <!-- ═══════════════════════════════════════════════
@@ -124,11 +105,53 @@
         <span class="gradient-text">HR gets done.</span>
       </h1>
 
-      <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
-        HR Portal replaces your HR portal, ticketing system, and policy PDFs
-        with a single chat interface. Employees ask questions and complete
-        workflows — no forms, no menus, no waiting.
+      <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-6 leading-relaxed">
+        HR Portal is a mobile-first HR app for Android and iOS. Employees ask
+        questions and complete HR workflows through a simple chat interface — no
+        forms, no portals, no waiting.
       </p>
+
+      <!-- Platform badges -->
+      <div class="flex items-center justify-center gap-3 mb-10 flex-wrap">
+        <span
+          class="inline-flex items-center gap-1.5 bg-gray-900 text-white text-xs font-semibold px-4 py-2 rounded-full"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"
+            />
+          </svg>
+          iOS App
+        </span>
+        <span
+          class="inline-flex items-center gap-1.5 bg-gray-800 text-white text-xs font-semibold px-4 py-2 rounded-full"
+        >
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M17.523 15.341l1.505-2.608a.32.32 0 00-.117-.437l-1.527-.882a5.965 5.965 0 00-.584-1.016l.611-1.717a.32.32 0 00-.198-.407l-1.695-.563a5.98 5.98 0 00-.878-.573l-.146-1.793a.32.32 0 00-.32-.295h-1.75a.32.32 0 00-.32.295l-.146 1.793a5.98 5.98 0 00-.878.573l-1.695.563a.32.32 0 00-.198.407l.611 1.717a5.965 5.965 0 00-.584 1.016l-1.527.882a.32.32 0 00-.117.437l1.505 2.608a.32.32 0 00.437.117l1.473-.85c.284.2.584.376.898.524l.22 1.767a.32.32 0 00.32.283h3a.32.32 0 00.32-.283l.22-1.767a5.94 5.94 0 00.898-.524l1.473.85a.32.32 0 00.437-.117zM12 14a2 2 0 110-4 2 2 0 010 4z"
+            />
+          </svg>
+          Android App
+        </span>
+        <span
+          class="inline-flex items-center gap-1.5 bg-gray-100 text-gray-600 text-xs font-semibold px-4 py-2 rounded-full"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9"
+            />
+          </svg>
+          Web too
+        </span>
+      </div>
 
       <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
         <a
@@ -150,17 +173,10 @@
       <!-- Phone mockup showcase -->
       <div class="mt-16 flex items-end justify-center gap-4 md:gap-6">
         <!-- Left phone — tilted left, shorter -->
-        <div
-          class="hidden sm:block flex-shrink-0 w-40 md:w-48"
-          style="
-            transform: rotate(-6deg) translateY(24px);
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
-          "
-        >
+        <div class="phone-left hidden sm:block flex-shrink-0 w-40 md:w-48">
           <div class="bg-gray-900 rounded-[2.5rem] p-2 ring-1 ring-white/10">
             <div
-              class="bg-gray-800 rounded-[2rem] overflow-hidden"
-              style="aspect-ratio: 9/19.5"
+              class="phone-screen bg-gray-800 rounded-[2rem] overflow-hidden"
             >
               <img
                 src="assets/Screenshot_2026-06-07-22-53-09-436_com.hrportal.hr_portal.jpg"
@@ -172,14 +188,10 @@
         </div>
 
         <!-- Centre phone — upright, tallest -->
-        <div
-          class="flex-shrink-0 w-52 md:w-64 z-10"
-          style="filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.2))"
-        >
+        <div class="phone-center flex-shrink-0 w-52 md:w-64 z-10">
           <div class="bg-gray-900 rounded-[2.5rem] p-2.5 ring-1 ring-white/10">
             <div
-              class="bg-gray-800 rounded-[2rem] overflow-hidden"
-              style="aspect-ratio: 9/19.5"
+              class="phone-screen bg-gray-800 rounded-[2rem] overflow-hidden"
             >
               <img
                 src="assets/Screenshot_2026-06-07-22-53-48-168_com.hrportal.hr_portal.jpg"
@@ -191,17 +203,10 @@
         </div>
 
         <!-- Right phone — tilted right, shorter -->
-        <div
-          class="hidden sm:block flex-shrink-0 w-40 md:w-48"
-          style="
-            transform: rotate(6deg) translateY(24px);
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
-          "
-        >
+        <div class="phone-right hidden sm:block flex-shrink-0 w-40 md:w-48">
           <div class="bg-gray-900 rounded-[2.5rem] p-2 ring-1 ring-white/10">
             <div
-              class="bg-gray-800 rounded-[2rem] overflow-hidden"
-              style="aspect-ratio: 9/19.5"
+              class="phone-screen bg-gray-800 rounded-[2rem] overflow-hidden"
             >
               <img
                 src="assets/Screenshot_2026-06-07-22-53-59-796_com.hrportal.hr_portal.jpg"
@@ -538,10 +543,12 @@
                 />
               </svg>
             </div>
-            <h3 class="font-semibold text-gray-900 mb-2">Multi-tenant Ready</h3>
+            <h3 class="font-semibold text-gray-900 mb-2">
+              Android, iOS &amp; Web
+            </h3>
             <p class="text-gray-500 text-sm leading-relaxed">
-              Built for companies with multiple teams, departments, or entities.
-              Each tenant is fully isolated with its own data and policies.
+              HR Portal runs natively on Android and iOS, with a web version
+              included. One app, every platform, same experience.
             </p>
           </div>
 

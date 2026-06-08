@@ -1,0 +1,698 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Portal — AI-Native HR for Modern Teams</title>
+    <meta
+      name="description"
+      content="HR Portal replaces your HR portal, ticketing system, and policy PDFs with a single chat interface. Employees ask. HR gets done."
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { sans: ["Inter", "sans-serif"] },
+            colors: {
+              brand: {
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                500: "#0ea5e9",
+                600: "#0284c7",
+                700: "#0369a1",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      .gradient-text {
+        background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+      }
+      .card-hover {
+        transition:
+          box-shadow 0.2s ease,
+          transform 0.2s ease;
+      }
+      .card-hover:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-gray-900 bg-white antialiased">
+    <!-- ═══════════════════════════════════════════════
+       NAV
+  ════════════════════════════════════════════════ -->
+    <header
+      class="sticky top-0 z-50 bg-white/90 backdrop-blur border-b border-gray-100"
+    >
+      <div
+        class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between"
+      >
+        <a href="#" class="flex items-center gap-2">
+          <div
+            class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center"
+          >
+            <svg
+              class="w-4 h-4 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+          </div>
+          <span class="text-lg font-700 text-gray-900 font-bold"
+            >HR Portal</span
+          >
+        </a>
+        <nav
+          class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600"
+        >
+          <a href="#how-it-works" class="hover:text-gray-900 transition-colors"
+            >How it works</a
+          >
+          <a href="#features" class="hover:text-gray-900 transition-colors"
+            >Features</a
+          >
+        </nav>
+        <a
+          href="https://tally.so/r/MeVgPX"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="bg-brand-600 hover:bg-brand-700 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-colors"
+        >
+          Request Demo →
+        </a>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════
+       HERO
+  ════════════════════════════════════════════════ -->
+    <section class="max-w-6xl mx-auto px-6 pt-20 pb-16 text-center">
+      <div
+        class="inline-flex items-center gap-2 bg-brand-50 border border-brand-100 text-brand-700 text-xs font-semibold px-3 py-1.5 rounded-full mb-8"
+      >
+        <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+        Currently in early access
+      </div>
+
+      <h1
+        class="text-5xl md:text-6xl font-extrabold text-gray-900 leading-tight mb-6"
+      >
+        Your employees ask.<br />
+        <span class="gradient-text">HR gets done.</span>
+      </h1>
+
+      <p class="text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
+        HR Portal replaces your HR portal, ticketing system, and policy PDFs
+        with a single chat interface. Employees ask questions and complete
+        workflows — no forms, no menus, no waiting.
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href="https://tally.so/r/MeVgPX"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="w-full sm:w-auto bg-brand-600 hover:bg-brand-700 text-white font-semibold px-8 py-3.5 rounded-lg transition-colors text-base"
+        >
+          Request Early Access →
+        </a>
+        <a
+          href="#how-it-works"
+          class="w-full sm:w-auto text-gray-600 hover:text-gray-900 font-medium px-8 py-3.5 rounded-lg border border-gray-200 hover:border-gray-300 transition-colors text-base"
+        >
+          See how it works
+        </a>
+      </div>
+
+      <!-- Phone mockup showcase -->
+      <div class="mt-16 flex items-end justify-center gap-4 md:gap-6">
+        <!-- Left phone — tilted left, shorter -->
+        <div
+          class="hidden sm:block flex-shrink-0 w-40 md:w-48"
+          style="
+            transform: rotate(-6deg) translateY(24px);
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+          "
+        >
+          <div class="bg-gray-900 rounded-[2.5rem] p-2 ring-1 ring-white/10">
+            <div
+              class="bg-gray-800 rounded-[2rem] overflow-hidden"
+              style="aspect-ratio: 9/19.5"
+            >
+              <img
+                src="assets/Screenshot_2026-06-07-22-53-09-436_com.hrportal.hr_portal.jpg"
+                alt="HR Portal dashboard"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Centre phone — upright, tallest -->
+        <div
+          class="flex-shrink-0 w-52 md:w-64 z-10"
+          style="filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.2))"
+        >
+          <div class="bg-gray-900 rounded-[2.5rem] p-2.5 ring-1 ring-white/10">
+            <div
+              class="bg-gray-800 rounded-[2rem] overflow-hidden"
+              style="aspect-ratio: 9/19.5"
+            >
+              <img
+                src="assets/Screenshot_2026-06-07-22-53-48-168_com.hrportal.hr_portal.jpg"
+                alt="HR Portal AI chat"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Right phone — tilted right, shorter -->
+        <div
+          class="hidden sm:block flex-shrink-0 w-40 md:w-48"
+          style="
+            transform: rotate(6deg) translateY(24px);
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+          "
+        >
+          <div class="bg-gray-900 rounded-[2.5rem] p-2 ring-1 ring-white/10">
+            <div
+              class="bg-gray-800 rounded-[2rem] overflow-hidden"
+              style="aspect-ratio: 9/19.5"
+            >
+              <img
+                src="assets/Screenshot_2026-06-07-22-53-59-796_com.hrportal.hr_portal.jpg"
+                alt="HR Portal policy Q&A"
+                class="w-full h-full object-cover object-top"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       PROBLEM
+  ════════════════════════════════════════════════ -->
+    <section class="bg-gray-50 py-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="max-w-3xl mx-auto text-center mb-14">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            HR is broken for everyone involved
+          </h2>
+          <p class="text-lg text-gray-500">
+            Employees don't know where to look. HR is buried in repetitive
+            requests. Simple tasks take longer than they should.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+          <div class="bg-white rounded-2xl p-8 border border-red-100">
+            <p
+              class="text-xs font-bold uppercase tracking-widest text-red-400 mb-4"
+            >
+              Today
+            </p>
+            <ul class="space-y-3 text-gray-600 text-sm">
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-0.5">✕</span>Employees navigate
+                confusing portals to find a leave form
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-0.5">✕</span>Policy documents sit
+                unread in shared drives
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-0.5">✕</span>HR answers the same
+                questions dozens of times a week
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-red-400 mt-0.5">✕</span>Managers chase
+                approvals through email and WhatsApp
+              </li>
+            </ul>
+          </div>
+          <div class="bg-white rounded-2xl p-8 border border-brand-100">
+            <p
+              class="text-xs font-bold uppercase tracking-widest text-brand-500 mb-4"
+            >
+              With HR Portal
+            </p>
+            <ul class="space-y-3 text-gray-600 text-sm">
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 mt-0.5">✓</span>Employees type a
+                question and get an instant, accurate answer
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 mt-0.5">✓</span>Policies are
+                searchable and cited in context
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 mt-0.5">✓</span>HR focuses on
+                people, not repetitive queries
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-brand-500 mt-0.5">✓</span>Leave requests,
+                payslips, and approvals happen in one place
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       HOW IT WORKS
+  ════════════════════════════════════════════════ -->
+    <section id="how-it-works" class="py-20 max-w-6xl mx-auto px-6">
+      <div class="text-center mb-14">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+          How HR Portal works
+        </h2>
+        <p class="text-lg text-gray-500 max-w-xl mx-auto">
+          Three steps. No training sessions. No new apps to learn.
+        </p>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="text-center">
+          <div
+            class="w-14 h-14 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center mx-auto mb-5"
+          >
+            <svg
+              class="w-6 h-6 text-brand-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+          </div>
+          <div
+            class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2"
+          >
+            Step 1
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Ask anything</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            "How many leave days do I have?" "What's the maternity policy?"
+            "Apply 3 days leave next week." Employees use plain language — no
+            forms required.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-14 h-14 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center mx-auto mb-5"
+          >
+            <svg
+              class="w-6 h-6 text-brand-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+              />
+            </svg>
+          </div>
+          <div
+            class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2"
+          >
+            Step 2
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">
+            Understands your company
+          </h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            HR Portal reads your company's policy documents and answers from
+            <em>your</em> actual policies — not generic internet knowledge.
+            Every answer is cited and traceable.
+          </p>
+        </div>
+
+        <div class="text-center">
+          <div
+            class="w-14 h-14 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center mx-auto mb-5"
+          >
+            <svg
+              class="w-6 h-6 text-brand-600"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 10V3L4 14h7v7l9-11h-7z"
+              />
+            </svg>
+          </div>
+          <div
+            class="text-xs font-bold uppercase tracking-widest text-gray-400 mb-2"
+          >
+            Step 3
+          </div>
+          <h3 class="text-lg font-semibold text-gray-900 mb-2">Takes action</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">
+            It doesn't just answer — it acts. Submit leave, retrieve payslips,
+            check balances, route approvals. Managers review team requests in
+            the same interface.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       FEATURES
+  ════════════════════════════════════════════════ -->
+    <section id="features" class="bg-gray-50 py-20">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="text-center mb-14">
+          <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+            Everything HR, through chat
+          </h2>
+          <p class="text-lg text-gray-500 max-w-xl mx-auto">
+            Built for employees, managers, and HR teams — in the same interface.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-6">
+          <div
+            class="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
+          >
+            <div
+              class="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-5 h-5 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Policy Q&A</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Ask about any HR policy and get an answer grounded in your
+              company's actual documents. No more hunting through PDFs.
+            </p>
+          </div>
+
+          <div
+            class="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
+          >
+            <div
+              class="w-10 h-10 rounded-xl bg-green-50 flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-5 h-5 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Leave Management</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Apply for leave, check balances, and track approval status — all
+              through a single conversation.
+            </p>
+          </div>
+
+          <div
+            class="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
+          >
+            <div
+              class="w-10 h-10 rounded-xl bg-purple-50 flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-5 h-5 text-purple-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Payslip Access</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Employees retrieve their payslips instantly. No calls to HR. No
+              waiting for a portal to load.
+            </p>
+          </div>
+
+          <div
+            class="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
+          >
+            <div
+              class="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-5 h-5 text-orange-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Manager Workflows</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Managers approve requests, view team leave calendars, and get team
+              overviews — in the same chat interface as their employees.
+            </p>
+          </div>
+
+          <div
+            class="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
+          >
+            <div
+              class="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-5 h-5 text-indigo-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-2 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
+                />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Multi-tenant Ready</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Built for companies with multiple teams, departments, or entities.
+              Each tenant is fully isolated with its own data and policies.
+            </p>
+          </div>
+
+          <div
+            class="bg-white rounded-2xl p-6 border border-gray-100 card-hover"
+          >
+            <div
+              class="w-10 h-10 rounded-xl bg-teal-50 flex items-center justify-center mb-4"
+            >
+              <svg
+                class="w-5 h-5 text-teal-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                />
+              </svg>
+            </div>
+            <h3 class="font-semibold text-gray-900 mb-2">Role-based Access</h3>
+            <p class="text-gray-500 text-sm leading-relaxed">
+              Employees see only their own data. Managers see only their team.
+              HR admins have full visibility. Access is enforced at every layer.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       TRUST
+  ════════════════════════════════════════════════ -->
+    <section class="py-20 max-w-6xl mx-auto px-6">
+      <div
+        class="bg-gray-50 rounded-3xl p-10 md:p-14 border border-gray-100 max-w-4xl mx-auto text-center"
+      >
+        <div
+          class="w-12 h-12 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center mx-auto mb-6"
+        >
+          <svg
+            class="w-5 h-5 text-brand-600"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+            />
+          </svg>
+        </div>
+        <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+          Built with data responsibility in mind
+        </h2>
+        <p class="text-gray-500 leading-relaxed max-w-2xl mx-auto mb-8">
+          HR Portal is designed with data minimisation from the ground up.
+          Employee data is scoped by role and company. We do not use your
+          company's data to train AI models. Early access customers work
+          directly with our team on deployment and data handling.
+        </p>
+        <div class="grid sm:grid-cols-3 gap-6 text-sm text-left">
+          <div class="flex items-start gap-3">
+            <span class="text-brand-500 font-bold mt-0.5">✓</span>
+            <span class="text-gray-600"
+              >Role-scoped data — employees only see what they should</span
+            >
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-brand-500 font-bold mt-0.5">✓</span>
+            <span class="text-gray-600"
+              >Your data is never used to train AI models</span
+            >
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="text-brand-500 font-bold mt-0.5">✓</span>
+            <span class="text-gray-600"
+              >Fully isolated per company — no data cross-contamination</span
+            >
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       REQUEST DEMO CTA
+  ════════════════════════════════════════════════ -->
+    <section id="request-demo" class="bg-brand-600 py-20">
+      <div class="max-w-3xl mx-auto px-6 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">
+          See HR Portal in action
+        </h2>
+        <p class="text-brand-100 text-lg mb-10 leading-relaxed">
+          We're onboarding a small number of early-access teams. Request a demo
+          and we'll reach out within 48 hours.
+        </p>
+        <a
+          href="https://tally.so/r/MeVgPX"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block bg-white text-brand-700 font-bold px-10 py-4 rounded-xl text-base hover:bg-brand-50 transition-colors shadow-lg"
+        >
+          Request Early Access →
+        </a>
+        <p class="text-brand-200 text-sm mt-5">
+          No sales pressure. No commitment. We'll show you the product and
+          answer your questions.
+        </p>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+       FOOTER
+  ════════════════════════════════════════════════ -->
+    <footer class="border-t border-gray-100 py-10">
+      <div
+        class="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-gray-400"
+      >
+        <div class="flex items-center gap-2">
+          <div
+            class="w-6 h-6 rounded bg-brand-600 flex items-center justify-center"
+          >
+            <svg
+              class="w-3 h-3 text-white"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+              />
+            </svg>
+          </div>
+          <span class="text-gray-600 font-medium">HR Portal</span>
+        </div>
+        <p class="text-gray-400">© 2025 HR Portal. All rights reserved.</p>
+        <a
+          href="mailto:shashikushwaha12345@gmail.com"
+          class="hover:text-gray-600 transition-colors"
+        >
+          shashikushwaha12345@gmail.com
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

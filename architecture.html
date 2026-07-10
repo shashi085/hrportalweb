@@ -1,0 +1,715 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HR Portal — Architecture & Flows Explorer</title>
+    <meta
+      name="description"
+      content="Interactive exploration of the HR Portal backend flows, data schemas, multi-tenant security architecture, and RAG pipeline."
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: { 
+              sans: ["Inter", "sans-serif"],
+              mono: ["JetBrains Mono", "monospace"]
+            },
+            colors: {
+              brand: {
+                50: "#f0f9ff",
+                100: "#e0f2fe",
+                500: "#0ea5e9",
+                600: "#0284c7",
+                700: "#0369a1",
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <!-- Import Mermaid.js ES module via CDN -->
+    <script type="module">
+      import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+      mermaid.initialize({ 
+        startOnLoad: false, 
+        theme: 'dark',
+        themeVariables: {
+          background: '#090d16',
+          primaryColor: '#1e293b',
+          primaryTextColor: '#cbd5e1',
+          primaryBorderColor: '#334155',
+          lineColor: '#0ea5e9',
+          secondaryColor: '#0f172a',
+          tertiaryColor: '#1e1b4b',
+          actorBkg: '#0f172a',
+          actorBorder: '#1e293b',
+          actorTextColor: '#cbd5e1',
+          actorLineColor: '#334155',
+          signalColor: '#0ea5e9',
+          signalTextColor: '#cbd5e1',
+          labelBoxBkgColor: '#090d16',
+          labelBoxBorderColor: '#1e293b',
+          labelTextColor: '#cbd5e1',
+          loopTextColor: '#cbd5e1',
+          noteBkgColor: '#0c4a6e40',
+          noteBorderColor: '#0ea5e9',
+          noteTextColor: '#f8fafc'
+        }
+      });
+      window.mermaid = mermaid;
+    </script>
+    <style>
+      .gradient-bg {
+        background: linear-gradient(135deg, #090d16 0%, #0b1528 50%, #15103a 100%);
+      }
+      .glass-panel {
+        background: rgba(30, 41, 59, 0.4);
+        backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .glow-border:hover {
+        border-color: rgba(14, 165, 233, 0.4);
+        box-shadow: 0 0 15px rgba(14, 165, 233, 0.1);
+      }
+    </style>
+  </head>
+  <body class="font-sans text-slate-100 gradient-bg min-h-screen antialiased">
+
+    <!-- NAV -->
+    <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur border-b border-slate-800/60">
+      <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+        <a href="index.html" class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">
+            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <span class="text-lg font-bold text-white">HR Portal</span>
+        </a>
+        <div class="flex items-center gap-4">
+          <a href="index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors duration-200">
+            ← Back to Home
+          </a>
+        </div>
+      </div>
+    </header>
+
+    <!-- HEADER TITLE -->
+    <section class="max-w-7xl mx-auto px-6 pt-16 pb-8 text-center">
+      <div class="inline-flex items-center gap-2 bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold px-3 py-1.5 rounded-full mb-6">
+        System Architecture & Security
+      </div>
+      <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white mb-4">
+        Architecture & Flows Explorer
+      </h1>
+      <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+        Understand how the HR Portal processes user messages, isolates corporate databases, retrieves company policies, and ensures enterprise compliance.
+      </p>
+
+      <!-- View Selector -->
+      <div class="inline-flex p-1 bg-slate-900/80 rounded-xl border border-slate-800/80">
+        <button id="ceo-view-btn" class="px-6 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 bg-brand-600 text-white shadow-md">
+          🛡️ Security & Governance Overview
+        </button>
+        <button id="arch-view-btn" class="px-6 py-2.5 rounded-lg text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all duration-200">
+          ⚙️ Technical Schematics & Flows
+        </button>
+      </div>
+    </section>
+
+    <!-- INTERACTIVE SIMULATOR SECTION (Shared) -->
+    <section class="max-w-6xl mx-auto px-6 py-8">
+      <div class="glass-panel rounded-3xl p-6 md:p-8 border border-slate-800">
+        <div class="mb-6">
+          <h2 class="text-xl md:text-2xl font-bold text-white flex items-center gap-2.5">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-500 animate-pulse"></span>
+            Live Request Flow Simulator
+          </h2>
+          <p class="text-xs text-slate-400 mt-1">
+            Trace how a request travels through the code boundaries step-by-step. Toggle selectors to view how role policies and schema filters respond.
+          </p>
+        </div>
+
+        <!-- Controls Top Bar -->
+        <div class="bg-slate-900/60 p-6 rounded-2xl border border-slate-800/80 mb-8 flex flex-col md:flex-row items-end gap-6">
+          <div class="flex-1 w-full">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">1. Select Persona</label>
+            <select id="persona-select" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <div class="flex-1 w-full">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">2. Select Scenario / Query</label>
+            <select id="scenario-select" class="w-full bg-slate-950 border border-slate-800 text-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-brand-500">
+              <!-- Dynamically populated -->
+            </select>
+          </div>
+          <button id="run-sim-btn" class="w-full md:w-auto bg-brand-600 hover:bg-brand-500 text-white font-bold py-3.5 px-6 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-lg flex-shrink-0">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l-3.197-2.132a1 1 0 000-1.664z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            Execute Flow Simulation
+          </button>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8">
+          <!-- Quick Guide -->
+          <div class="lg:col-span-3">
+            <div class="p-5 rounded-2xl bg-slate-900/40 border border-slate-800/80 text-xs text-slate-400 leading-relaxed space-y-3">
+              <div class="font-bold text-slate-300 uppercase tracking-wider text-[10px] mb-1">Quick Sandbox Guide</div>
+              <p><strong class="text-brand-400">Sarah / Access Unauthorized:</strong> Witness how dynamic DB connection translation blocks cross-company leaks.</p>
+              <p><strong class="text-brand-400">Mike / Sarah's Contract:</strong> Check the role policies block manager access on HR files.</p>
+              <p><strong class="text-brand-400">Alice / Sarah's Contract:</strong> Confirm HR access and see the audit log database push.</p>
+            </div>
+          </div>
+
+          <!-- Simulator Trace Display -->
+          <div class="lg:col-span-9">
+            <label class="block text-xs font-semibold uppercase tracking-wider text-slate-400 mb-2">System Execution Trace</label>
+            <div id="sim-results" class="space-y-4">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ==============================================
+         💼 SECURITY & GOVERNANCE OVERVIEW SECTION
+         ============================================== -->
+    <div id="ceo-section" class="max-w-6xl mx-auto px-6 py-12 space-y-16">
+      
+      <!-- Value Pillars -->
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div class="glass-panel p-8 rounded-2xl border border-slate-800 glow-border transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-6 text-brand-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-3">Strict Tenant Separation</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Tenants are kept completely separate at the database connection level. There is zero overlapping namespace or cross-contamination, guaranteeing that customers cannot see each other's data at all.
+          </p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-2xl border border-slate-800 glow-border transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-6 text-brand-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-3">Hallucination Mitigation</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            The AI chatbot does not answer questions from generic training data. It searches and retrieves facts directly from your verified corporate PDFs, quoting the exact document revision.
+          </p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-2xl border border-slate-800 glow-border transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-6 text-brand-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-3">Zero-Trust Security Gating</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Each retrieval step checks permissions dynamically. High-level security gates guarantee the AI only sees and processes context the user's role is explicitly authorized to view.
+          </p>
+        </div>
+
+        <div class="glass-panel p-8 rounded-2xl border border-slate-800 glow-border transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-brand-500/10 flex items-center justify-center border border-brand-500/20 mb-6 text-brand-400">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+          </div>
+          <h3 class="text-lg font-bold text-white mb-3">Audit Logs & Compliance</h3>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            Every transaction, RAG lookup, and manager approval leaves a permanent, encrypted audit trail in high-performance query storage (Audit Store) for full forensic compliance.
+          </p>
+        </div>
+      </div>
+
+      <!-- Business Workflow Highlights -->
+      <div class="glass-panel rounded-3xl p-8 border border-slate-800">
+        <h3 class="text-2xl font-bold text-white mb-6">Core Business Lifecycles</h3>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-xs font-bold">1</span>
+              <h4 class="font-semibold text-slate-200">End-to-End Leave Workflow</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed pl-9">
+              Coordinates the full leave request cycle. Employees can check balances and request time off using natural language. The system identifies reviewer structures, routes approvals to managers, and securely updates database quotas once confirmed.
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center text-xs font-bold">2</span>
+              <h4 class="font-semibold text-slate-200">Performance Appraisal Management</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed pl-9">
+              Orchestrates reviews across the organization. It manages evaluation templates, self-assessments, and reviewer feedback, enforcing security policies so peer ratings are strictly visible only to authorized review partners.
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/30 flex items-center justify-center text-xs font-bold">3</span>
+              <h4 class="font-semibold text-slate-200">Smart Policy Search</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed pl-9">
+              When employees ask about company guidelines, the system securely searches verified HR documents to find exact matching rules (like resignation notice periods or holidays) and translates them into simple, clear answers.
+            </p>
+          </div>
+          <div class="space-y-4">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-full bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-xs font-bold">4</span>
+              <h4 class="font-semibold text-slate-200">Audited Contract Access</h4>
+            </div>
+            <p class="text-xs text-slate-400 leading-relaxed pl-9">
+              When employees ask to search or view their own employment contracts, the system verifies user permissions, locks down access strictly to the owner's record, and logs a permanent audit entry to track the transaction.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security Summary -->
+      <div class="bg-gradient-to-r from-slate-900 to-indigo-950/40 rounded-3xl p-8 border border-slate-850 flex flex-col md:flex-row items-center gap-8">
+        <div class="w-16 h-16 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex-shrink-0 flex items-center justify-center text-indigo-400">
+          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+          </svg>
+        </div>
+        <div>
+          <h4 class="text-lg font-bold text-white mb-2">Governance and Security Mandate</h4>
+          <p class="text-sm text-slate-400 leading-relaxed">
+            The HR Portal architecture incorporates **Zero-Trust Tool Scoping**. Under no condition does the AI agent make database modifications without matching preset permissions or explicit confirmation logic. All operational actions are logged for maximum visibility.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         🛠️ TECH ARCHITECT VIEW SECTION
+         ============================================== -->
+    <div id="arch-section" class="max-w-6xl mx-auto px-6 py-12 space-y-16 hidden">
+      
+      <!-- 1. System Request flow sequence -->
+      <div class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+        <div>
+          <h3 class="text-xl font-bold text-white">1. Chat Request & Tool Lifecycle Sequence</h3>
+          <p class="text-xs text-slate-400 mt-1">
+            Sequence diagram illustrating client authentication, multi-tenant session translation, intent routing, tool gating, and database writes.
+          </p>
+        </div>
+        
+        <!-- Mermaid Container -->
+        <div class="mermaid-container-seq relative bg-slate-950/60 p-6 rounded-2xl border border-slate-900 hover:border-brand-500/40 cursor-pointer hover:ring-1 hover:ring-brand-500/20 hover:scale-[1.002] transition-all duration-300 flex justify-center group">
+          <div class="absolute right-4 top-4 bg-slate-900/95 border border-slate-800 text-[10px] text-brand-400 px-2.5 py-1 rounded-full font-semibold opacity-60 group-hover:opacity-100 transition-opacity duration-200 flex items-center gap-1.5 shadow-md">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v6m4-3H6" /></svg>
+            Click to Zoom Diagram
+          </div>
+          <pre class="mermaid text-xs font-mono">
+sequenceDiagram
+    autonumber
+    actor Client as Mobile & Web Client
+    participant Router as API Gateway
+    participant Service as Chat Orchestrator
+    participant AuthCtx as Auth Context Builder
+    participant DB as Tenant Database
+    participant HybridRouter as Hybrid Intent Router
+    participant PolicyService as Tool Gating Engine
+    participant AI as AI Gateway
+
+    Client->>Router: POST /chat { messages } (Bearer JWT)
+    Router->>Router: Verify JWT & extract claims
+    Router->>Service: chat(request, current_user)
+    Service->>AuthCtx: build_chat_auth_context()
+    AuthCtx->>DB: Query profile, presets & permissions
+    DB-->>AuthCtx: Raw database records
+    AuthCtx-->>Service: ChatAuthContext (permission_codes, relationships)
+    Service->>HybridRouter: route(message, history, permission_codes)
+    HybridRouter-->>Service: ChatRoute(domain, action_stage, target_scope)
+    Service->>PolicyService: Filter accessible tools
+    PolicyService-->>Service: List of accessible tools
+    Service->>AI: call_ai(messages, accessible_tools)
+    AI-->>Service: Tool call requests (submit_leave, etc)
+    Service->>DB: Execute actions (bound strictly to tenant schema)
+    DB-->>Service: Status / Write confirmation
+    Service-->>Router: ChatResponse
+    Router-->>Client: HTTP 200 OK (ChatResponse)
+          </pre>
+        </div>
+      </div>
+
+      <!-- 2. RAG & Ingestion Pipeline -->
+      <div class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+        <div>
+          <h3 class="text-xl font-bold text-white">2. Document Ingestion & RAG Retrieval Pipeline</h3>
+          <p class="text-xs text-slate-400 mt-1">
+            How policy files are processed and retrieved through a simplified 5-stage Query Understanding and Planning Pipeline.
+          </p>
+        </div>
+
+        <!-- Mermaid Container -->
+        <div class="bg-slate-950/60 p-6 rounded-2xl border border-slate-900 overflow-x-auto flex justify-center">
+          <pre class="mermaid text-xs font-mono">
+flowchart TD
+    %% Node Style Definitions
+    classDef default fill:#0f172a,stroke:#1e293b,stroke-width:1px,color:#cbd5e1,font-family:Inter,font-size:10px;
+    classDef inputNode fill:#0c4a6e40,stroke:#0ea5e9,stroke-width:1.5px,color:#f8fafc,font-family:Inter,font-weight:bold,font-size:10px;
+    classDef outputNode fill:#064e3b40,stroke:#10b981,stroke-width:1.5px,color:#f8fafc,font-family:Inter,font-weight:bold,font-size:10px;
+
+    subgraph Ingestion["Ingestion Pipeline"]
+        Doc["PDF / Docx Ingestion"]:::inputNode --> Parser["Structure Parser"]
+        Parser --> Chunker["Chunker and Metadata Tagging"]
+        Chunker --> Embed["Vector Embeddings Generator"]
+        Embed --> VectorDB["Tenant Vector Document Store"]:::outputNode
+    end
+
+    subgraph RAG["Query and RAG Planning"]
+        UserQuery["User Question"]:::inputNode --> Analyzer["1. Query Analysis and Concept Expansion"]
+        Analyzer --> Planner["2. Retrieval Plan and Validation"]
+        Planner --> Searcher["3. Smart Vector Search and Deduplication"]
+        Searcher --> Security["4. Row-Level Security Filtering"]
+        Security --> Context["5. Grounded AI Context"]:::outputNode
+    end
+
+    %% Style Subgraphs
+    style Ingestion fill:#1e293b15,stroke:#334155,stroke-width:1.5px,rx:12px,ry:12px;
+    style RAG fill:#1e293b15,stroke:#334155,stroke-width:1.5px,rx:12px,ry:12px;
+
+    %% Style Links
+    linkStyle default stroke:#0ea5e9,stroke-width:1.5px,opacity:0.75;
+          </pre>
+        </div>
+
+        <!-- RAG Explanation Legend -->
+        <div class="grid md:grid-cols-5 gap-6 text-xs mt-8 pt-8 border-t border-slate-900">
+          <div class="space-y-2 bg-slate-900/10 p-4 rounded-xl border border-slate-900/60">
+            <div class="font-bold text-brand-400 text-[11px] uppercase tracking-wider">1. Query Analysis</div>
+            <p class="text-slate-400 leading-relaxed">
+              Analyzes the user's question, extracts core concepts, and expands terms (e.g. mapping 'resign' to 'resignation notice') to capture natural phrasing.
+            </p>
+          </div>
+          <div class="space-y-2 bg-slate-900/10 p-4 rounded-xl border border-slate-900/60">
+            <div class="font-bold text-brand-400 text-[11px] uppercase tracking-wider">2. Retrieval Plan</div>
+            <p class="text-slate-400 leading-relaxed">
+              Builds a search blueprint deciding which directories to query, then validates inputs to ensure requests comply with database boundaries.
+            </p>
+          </div>
+          <div class="space-y-2 bg-slate-900/10 p-4 rounded-xl border border-slate-900/60">
+            <div class="font-bold text-brand-400 text-[11px] uppercase tracking-wider">3. Vector Search</div>
+            <p class="text-slate-400 leading-relaxed">
+              Queries semantic vector indexes, aggregates matching paragraph fragments from company files, and filters duplicates.
+            </p>
+          </div>
+          <div class="space-y-2 bg-slate-900/10 p-4 rounded-xl border border-slate-900/60">
+            <div class="font-bold text-brand-400 text-[11px] uppercase tracking-wider">4. Security Filtering</div>
+            <p class="text-slate-400 leading-relaxed">
+              Passes retrieved segments through dynamic permission policies (e.g. Employee vs HR Admin presets), filtering unauthorized chunks out.
+            </p>
+          </div>
+          <div class="space-y-2 bg-slate-900/10 p-4 rounded-xl border border-slate-900/60">
+            <div class="font-bold text-brand-400 text-[11px] uppercase tracking-wider">5. Grounded Context</div>
+            <p class="text-slate-400 leading-relaxed">
+              Feeds only the verified, safe, and authorized text fragments to the AI model to generate a hallucination-free response citing exact revisions.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Multi-Tenant Database Isolation Engine -->
+      <div class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+        <div>
+          <h3 class="text-xl font-bold text-white">3. Multi-Tenant Database Isolation Engine</h3>
+          <p class="text-xs text-slate-400 mt-1">
+            How dynamic connection routing ensures strict database separation between corporate tenants.
+          </p>
+        </div>
+
+        <div class="grid md:grid-cols-12 gap-8 items-center">
+          <!-- Text details -->
+          <div class="md:col-span-6 space-y-4">
+            <h4 class="font-bold text-slate-200 text-sm">Dynamic Connection Isolation</h4>
+            <p class="text-xs text-slate-400 leading-relaxed font-sans">
+              Instead of filtering database rows using conditional <code>WHERE tenant_id = 'company'</code> filters (which are prone to developer omission and leaking vulnerabilities), data isolation is enforced at the database connection layer itself.
+            </p>
+            <p class="text-xs text-slate-400 leading-relaxed font-sans">
+              Each customer tenant's records live inside an independent, fully isolated database namespace. When a request is verified, a lightweight branched database engine is spawned specifically for that tenant, translating all database query instructions to execute exclusively within their isolated context. Tenants have no access to, or visibility of, other tenant spaces.
+            </p>
+          </div>
+
+          <!-- Code Translation panel -->
+          <div class="md:col-span-6 space-y-4">
+            <div class="p-5 rounded-2xl bg-slate-950/60 border border-slate-900">
+              <div class="text-[10px] uppercase font-mono text-slate-500 mb-2">Engine Schema Translation Map</div>
+              <p class="text-xs text-slate-400 leading-relaxed mb-3">
+                The database adapter intercepts statements at the connection pool level, dynamically mapping generic table queries to isolated tenant schemas.
+              </p>
+              <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-850">
+                <div class="text-[9px] uppercase font-mono text-slate-500 mb-2">app/db/session.py</div>
+                <pre class="text-[11px] font-mono text-brand-400 leading-relaxed">
+def make_tenant_session(tenant_id):
+  schema = _safe_schema_name(tenant_id)
+  # Configure connection session with dynamic schema mapping
+  tenant_connection = db_connection.configure_session(
+    schema_translate_map={"tenant": schema}
+  )
+  return tenant_connection.open_session()
+                </pre>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Role Scoping & Permission Catalogue -->
+      <div class="glass-panel p-8 rounded-3xl border border-slate-800 space-y-6">
+        <div>
+          <h3 class="text-xl font-bold text-white">4. Role Scoping & Permission Catalogue</h3>
+          <p class="text-xs text-slate-400 mt-1">
+            Click on a system role preset on the left to see its default permission codes highlight in the security grid on the right.
+          </p>
+        </div>
+
+        <div class="grid lg:grid-cols-12 gap-8 text-xs">
+          <!-- Role Presets (Left Side) -->
+          <div class="lg:col-span-4 space-y-4">
+            <h4 class="font-bold text-slate-200 text-sm uppercase tracking-wider text-[10px]">1. Select System Preset</h4>
+            
+            <button id="preset-btn-employee" class="w-full text-left p-5 rounded-2xl border border-slate-850 bg-slate-900/40 hover:bg-slate-900/60 transition-all duration-200 flex flex-col gap-1 ring-1 ring-transparent">
+              <span class="font-bold text-slate-200 text-sm flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                Employee Preset
+              </span>
+              <span class="text-slate-400 text-xs mt-1">Granted basic conversational access for personal self-service actions.</span>
+            </button>
+
+            <button id="preset-btn-manager" class="w-full text-left p-5 rounded-2xl border border-slate-850 bg-slate-900/40 hover:bg-slate-900/60 transition-all duration-200 flex flex-col gap-1 ring-1 ring-transparent">
+              <span class="font-bold text-slate-200 text-sm flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                People Manager Preset
+              </span>
+              <span class="text-slate-400 text-xs mt-1">Granted team scopes, direct reports access, and leave approvals.</span>
+            </button>
+
+            <button id="preset-btn-hr" class="w-full text-left p-5 rounded-2xl border border-slate-850 bg-slate-900/40 hover:bg-slate-900/60 transition-all duration-200 flex flex-col gap-1 ring-1 ring-transparent">
+              <span class="font-bold text-slate-200 text-sm flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-500"></span>
+                HR Administrator Preset
+              </span>
+              <span class="text-slate-400 text-xs mt-1">Granted unrestricted privileges including settings and contract access.</span>
+            </button>
+          </div>
+
+          <!-- Permission Grid (Right Side) -->
+          <div class="lg:col-span-8 space-y-4">
+            <h4 class="font-bold text-slate-200 text-sm uppercase tracking-wider text-[10px]">2. Scoped Permission Codes</h4>
+            
+            <div class="grid md:grid-cols-2 gap-4 bg-slate-950/40 p-5 rounded-2xl border border-slate-900">
+              
+              <!-- General Category -->
+              <div class="space-y-2.5">
+                <h5 class="font-semibold text-slate-300 border-b border-slate-900 pb-1 flex items-center gap-1.5">
+                  <span class="text-brand-500">⚙️</span> General & System
+                </h5>
+                <div class="flex flex-col gap-2">
+                  <div data-perm="can_use_chat" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_use_chat</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Access the AI HR assistant interface.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_view_admin_hub" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_view_admin_hub</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Access main administrator console.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_view_audit_logs" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_view_audit_logs</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Examine transaction and audit logs.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_manage_roles_permissions" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_roles_permissions</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Edit system role mappings and presets.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- HR & Team Category -->
+              <div class="space-y-2.5">
+                <h5 class="font-semibold text-slate-300 border-b border-slate-900 pb-1 flex items-center gap-1.5">
+                  <span class="text-brand-500">👥</span> HR & Team Scope
+                </h5>
+                <div class="flex flex-col gap-2">
+                  <div data-perm="can_manage_team" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_team</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Access direct reports and reviewer details.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_manage_employees" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_employees</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Maintain global user profiles.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_manage_users" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_users</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Deactivate accounts or provision credentials.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_view_hr_reports" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_view_hr_reports</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Access high-level workforce metrics.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Performance Category -->
+              <div class="space-y-2.5">
+                <h5 class="font-semibold text-slate-300 border-b border-slate-900 pb-1 flex items-center gap-1.5">
+                  <span class="text-brand-500">📈</span> Performance Cycles
+                </h5>
+                <div class="flex flex-col gap-2">
+                  <div data-perm="can_manage_performance_cycles" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_performance_cycles</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Initialize appraisal timelines.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_manage_cycle_eligibility" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_cycle_eligibility</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Configure review relationships.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_view_performance_reports" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_view_performance_reports</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">View performance appraisal analytics.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Documents & Contracts Category -->
+              <div class="space-y-2.5">
+                <h5 class="font-semibold text-slate-300 border-b border-slate-900 pb-1 flex items-center gap-1.5">
+                  <span class="text-brand-500">📄</span> Documents & Contracts
+                </h5>
+                <div class="flex flex-col gap-2">
+                  <div data-perm="can_manage_policy_documents" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_policy_documents</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Modify policy manuals stored in Vector Store.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_manage_contract_documents" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_contract_documents</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Upload contract versions to Vector Store.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_view_employee_contracts" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_view_employee_contracts</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Browse sensitive employment agreements (audited).</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Leave Category -->
+              <div class="space-y-2.5 md:col-span-2">
+                <h5 class="font-semibold text-slate-300 border-b border-slate-900 pb-1 flex items-center gap-1.5">
+                  <span class="text-brand-500">📅</span> Leave & Time Operations
+                </h5>
+                <div class="grid md:grid-cols-2 gap-4">
+                  <div data-perm="can_approve_leave" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_approve_leave</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Approve or reject leave logs.</p>
+                    </div>
+                  </div>
+                  <div data-perm="can_manage_leave_balances" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
+                    <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
+                    <div>
+                      <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_manage_leave_balances</div>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Modify base quotas or carryovers.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+
+    <!-- Modal for sequence diagram zoom -->
+    <div id="diagram-modal" class="fixed inset-0 z-[100] hidden bg-slate-950/90 backdrop-blur flex items-center justify-center p-6 transition-all duration-300">
+      <button id="close-modal-btn" class="absolute top-6 right-6 text-slate-400 hover:text-white text-lg font-bold bg-slate-900 border border-slate-800 w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200">
+        ✕
+      </button>
+      <div id="modal-content" class="w-full max-w-7xl max-h-[85vh] overflow-auto bg-slate-950 p-6 rounded-3xl border border-slate-850 flex justify-center shadow-2xl">
+        <!-- SVG diagram gets injected here -->
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-slate-900 py-10 mt-20">
+      <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+        <div class="flex items-center gap-2">
+          <div class="w-6 h-6 rounded bg-brand-600 flex items-center justify-center">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+            </svg>
+          </div>
+          <span class="text-slate-400 font-medium">HR Portal</span>
+        </div>
+        <p class="text-slate-500">© 2025 HR Portal. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Import controller logic -->
+    <script src="assets/architecture.js"></script>
+  </body>
+</html>

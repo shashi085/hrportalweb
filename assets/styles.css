@@ -67,3 +67,32 @@ html {
   box-shadow: 0 16px 40px rgba(15, 23, 42, 0.10);
   transform: translateY(-4px);
 }
+
+
+/* ------------------------------------------------------------
+   5. SCROLLBAR UTILITIES (chat interface)
+   ------------------------------------------------------------ */
+
+/* Scrollbar utility classes */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Custom slim scrollbar for chat messages */
+.scrollbar-thin::-webkit-scrollbar {
+  width: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}

@@ -8,6 +8,20 @@
       name="description"
       content="Interactive exploration of the HR Portal backend flows, data schemas, multi-tenant security architecture, and RAG pipeline."
     />
+    <!-- ICONS use Logo-round.png, not the transparent mark used in the nav.
+         Both slots are square by spec and composite onto a background the page
+         does not control: a browser fits a favicon into a square box, and iOS
+         draws apple-touch-icon on the home screen. The transparent 3:2 source
+         would be letterboxed or stretched in the first and shown against an
+         arbitrary backdrop in the second. Logo-round.png is 2000x2000 and
+         opaque, so it needs neither padding nor a background guess. -->
+    <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/Logo-round-32w.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/brand/Logo-round-192w.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/brand/Logo-round-180w.png" />
+    <meta name="theme-color" content="#00695C" />
+    <!-- og:image keeps the transparent mark: social cards render it at a large
+         size where the 3:2 shape is correct, not squeezed into a square. -->
+    <meta property="og:image" content="assets/brand/logo-transparent-round-512w.png" />
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -87,12 +101,15 @@
     <header class="sticky top-0 z-50 bg-slate-950/80 backdrop-blur border-b border-slate-800/60">
       <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="index.html" class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-brand-600 flex items-center justify-center">
-            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-            </svg>
-          </div>
+          <!-- Used at its NATIVE 3:2 aspect, not padded to a square. Height is
+               fixed and width follows (h-8 w-auto) — forcing w-8 h-8 on a
+               1536x1024 source would squash it.
+               Transparent PNG: this same mark sits on a light background here
+               and on a dark header in architecture.html, so it must not carry
+               its own backdrop. Served at 144px wide into a 48px slot to stay
+               sharp on 3x displays. -->
+          <img src="assets/brand/logo-transparent-round-144w.png" alt="HR Portal logo"
+               width="48" height="32" class="h-8 w-auto" />
           <span class="text-lg font-bold text-white">HR Portal</span>
         </a>
         <div class="flex items-center gap-4">

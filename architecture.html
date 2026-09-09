@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>HR Portal — Architecture & Flows Explorer</title>
+    <title>Star — Architecture & Flows Explorer</title>
     <meta
       name="description"
-      content="Interactive exploration of the HR Portal backend flows, data schemas, multi-tenant security architecture, and RAG pipeline."
+      content="Interactive exploration of the Star backend flows, data schemas, multi-tenant security architecture, and RAG pipeline."
     />
     <!-- ICONS use Logo-round.png, not the transparent mark used in the nav.
          Both slots are square by spec and composite onto a background the page
@@ -108,9 +108,9 @@
                and on a dark header in architecture.html, so it must not carry
                its own backdrop. Served at 144px wide into a 48px slot to stay
                sharp on 3x displays. -->
-          <img src="assets/brand/logo-transparent-round-144w.png" alt="HR Portal logo"
+          <img src="assets/brand/logo-transparent-round-144w.png" alt="Boulevard Cosmos logo"
                width="48" height="32" class="h-8 w-auto" />
-          <span class="text-lg font-bold text-white">HR Portal</span>
+          <span class="text-lg font-bold text-white">Boulevard Cosmos</span>
         </a>
         <div class="flex items-center gap-4">
           <a href="index.html" class="text-sm font-medium text-slate-400 hover:text-white transition-colors duration-200">
@@ -129,7 +129,7 @@
         Architecture & Flows Explorer
       </h1>
       <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
-        Understand how the HR Portal processes user messages, isolates corporate databases, retrieves company policies, and ensures enterprise compliance.
+        Understand how the Star processes user messages, isolates corporate databases, retrieves company policies, and ensures enterprise compliance.
       </p>
 
       <!-- View Selector -->
@@ -285,7 +285,7 @@
               <h4 class="font-semibold text-slate-200">Smart Policy Search</h4>
             </div>
             <p class="text-xs text-slate-400 leading-relaxed pl-9">
-              When employees ask about company guidelines, the system securely searches verified HR documents to find exact matching rules (like resignation notice periods or holidays) and translates them into simple, clear answers.
+              When employees ask about company guidelines, the system securely searches verified company documents to find exact matching rules (like resignation notice periods or holidays) and translates them into simple, clear answers.
             </p>
           </div>
           <div class="space-y-4">
@@ -310,7 +310,7 @@
         <div>
           <h4 class="text-lg font-bold text-white mb-2">Governance and Security Mandate</h4>
           <p class="text-sm text-slate-400 leading-relaxed">
-            The HR Portal architecture incorporates **Zero-Trust Tool Scoping**. Under no condition does the AI agent make database modifications without matching preset permissions or explicit confirmation logic. All operational actions are logged for maximum visibility.
+            The Star architecture incorporates **Zero-Trust Tool Scoping**. Under no condition does the AI agent make database modifications without matching preset permissions or explicit confirmation logic. All operational actions are logged for maximum visibility.
           </p>
         </div>
       </div>
@@ -546,7 +546,7 @@ def make_tenant_session(tenant_id):
                     <span class="status-indicator w-1.5 h-1.5 rounded-full bg-slate-600 mt-1.5 flex-shrink-0"></span>
                     <div>
                       <div class="font-mono font-semibold text-slate-300 text-[10.5px]">can_use_chat</div>
-                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Access the AI HR assistant interface.</p>
+                      <p class="text-[10px] text-slate-500 leading-normal mt-0.5">Access the AI assistant interface.</p>
                     </div>
                   </div>
                   <div data-perm="can_view_admin_hub" class="flex items-start gap-2 p-2 rounded-xl border border-slate-850 bg-slate-900/10 transition-all duration-300">
@@ -720,9 +720,9 @@ def make_tenant_session(tenant_id):
                 d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
             </svg>
           </div>
-          <span class="text-slate-400 font-medium">HR Portal</span>
+          <span class="text-slate-400 font-medium">Boulevard Cosmos</span>
         </div>
-        <p class="text-slate-500">© 2025 HR Portal. All rights reserved.</p>
+        <p class="text-slate-500">© 2026 Boulevard Cosmos. All rights reserved.</p>
       </div>
     </footer>
 

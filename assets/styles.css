@@ -1,98 +1,979 @@
 /* ============================================================
-   HR Portal — Landing Page Styles
-   Tailwind CSS handles utility classes via CDN.
-   This file covers:
-     1. Base / global
-     2. Typography helpers
-     3. Component: Phone mockups
-     4. Component: Feature cards
+   Boulevard Cosmos — Public Website
+   Tailwind (CDN) handles layout utilities. This file covers:
+     0. Tokens
+     1. Base / reset
+     2. Typography
+     3. Motion + reveal system
+     4. Navigation
+     5. Chapter 1 — Boulevard Cosmos (hero)
+     6. Threshold (Boulevard Cosmos -> Star)
+     7. Card system (Star product surfaces)
+     8. Chapter 2 — Introducing Star (composition)
+     9. Chapter 3 — One question, many sources (fast reveal, no pin)
+    10. Chapter 4 — Intent to action (confirm)
+    11. Chapter 5 — Real Star (product anchor)
+    12. Chapter 6 — Star + human expertise
+    13. Chapter 7 — Company
+    14. Chapter 8 — CTA
+    15. Footer
+    16. Responsive
    ============================================================ */
 
 
 /* ------------------------------------------------------------
-   1. BASE / GLOBAL
+   0. TOKENS
+   ------------------------------------------------------------ */
+
+:root {
+  --ink: #14161c;
+  --ink-soft: #4c505c;
+  --ink-faint: #5c6069; /* darkened from an earlier #8b8f99 — that failed WCAG AA (~2.95:1) on --paper; this hits ~5.7:1 */
+  --line: rgba(20, 22, 28, 0.1);
+  --line-strong: rgba(20, 22, 28, 0.16);
+  --paper: #f6f4ef;
+  --paper-raised: #efece2;
+
+  --star-50: #eef7ff;
+  --star-100: #dcefff;
+  --star-200: #b7e0fe;
+  --star-300: #86c9fd;
+  --star-500: #238ce9;
+  --star-600: #166fc9;
+  --star-700: #155ea8;
+  --star-900: #122f57;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-inout: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-s: 260ms;
+  --dur-m: 460ms;
+  --dur-l: 900ms;
+  --reveal-offset: 24px;
+}
+
+
+/* ------------------------------------------------------------
+   1. BASE / RESET
    ------------------------------------------------------------ */
 
 html {
   scroll-behavior: smooth;
 }
 
-
-/* ------------------------------------------------------------
-   2. TYPOGRAPHY HELPERS
-   ------------------------------------------------------------ */
-
-/* Gradient brand headline used in the hero */
-.gradient-text {
-  background: linear-gradient(135deg, #0369a1 0%, #0ea5e9 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+body {
+  background: var(--paper);
+  color: var(--ink);
 }
 
-
-/* ------------------------------------------------------------
-   3. COMPONENT: PHONE MOCKUPS (hero section)
-   ------------------------------------------------------------ */
-
-.phone-left {
-  transform: rotate(-6deg) translateY(24px);
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
+::selection {
+  background: var(--star-200);
+  color: var(--ink);
 }
 
-.phone-center {
-  filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.2));
-}
-
-.phone-right {
-  transform: rotate(6deg) translateY(24px);
-  filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.15));
-}
-
-/* Forces the correct portrait phone aspect ratio for the screen area */
-.phone-screen {
-  aspect-ratio: 9 / 19.5;
-}
-
-
-/* ------------------------------------------------------------
-   4. COMPONENT: FEATURE CARDS
-   ------------------------------------------------------------ */
-
-.card-hover {
-  transition: box-shadow 0.25s ease, transform 0.25s ease;
-}
-
-.card-hover:hover {
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.10);
-  transform: translateY(-4px);
-}
-
-
-/* ------------------------------------------------------------
-   5. SCROLLBAR UTILITIES (chat interface)
-   ------------------------------------------------------------ */
-
-/* Scrollbar utility classes */
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
-}
-.scrollbar-none {
-  -ms-overflow-style: none;  /* IE and Edge */
-  scrollbar-width: none;  /* Firefox */
-}
-
-/* Custom slim scrollbar for chat messages */
-.scrollbar-thin::-webkit-scrollbar {
-  width: 4px;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: transparent;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.2);
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--star-600);
+  outline-offset: 3px;
   border-radius: 4px;
 }
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.4);
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+
+/* ------------------------------------------------------------
+   2. TYPOGRAPHY
+   ------------------------------------------------------------ */
+
+.kicker {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.kicker--star {
+  color: var(--star-700);
+}
+
+.display-1 {
+  font-size: clamp(2.75rem, 6.2vw, 5.75rem);
+  font-weight: 700;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+}
+
+.display-2 {
+  font-size: clamp(2.1rem, 4.4vw, 3.6rem);
+  font-weight: 700;
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+
+.display-3 {
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+
+.lede {
+  font-size: clamp(1.05rem, 1.6vw, 1.25rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+}
+
+
+/* ------------------------------------------------------------
+   3. MOTION + REVEAL SYSTEM
+   ------------------------------------------------------------ */
+
+/* Content defaults to fully visible — the hidden/offset "about to reveal"
+   state only applies once JS has confirmed it initialised (.js-ready on
+   <html>). This means no-JS, blocked-JS and crawler renders always see
+   full content instead of a page full of opacity:0 elements. */
+.js-ready [data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--reveal-offset));
+  transition: opacity var(--dur-m) var(--ease-out), transform var(--dur-m) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.js-ready [data-reveal-scale] {
+  opacity: 0;
+  transform: scale(0.96);
+  transition: opacity var(--dur-m) var(--ease-out), transform var(--dur-m) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal-scale].is-visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+[data-depth] {
+  transform: translate3d(var(--depth-x, 0), var(--depth-y, 0), 0) scale(var(--depth-s, 1)) rotate(var(--depth-r, 0deg));
+  will-change: transform;
+}
+
+/* Elements that both reveal-in AND carry scroll depth need one composed
+   transform declaration — otherwise the two rules fight over `transform`. */
+.js-ready [data-reveal][data-depth] {
+  opacity: 0;
+  transform: translate3d(var(--depth-x, 0), calc(var(--depth-y, 0) + 22px), 0) scale(var(--depth-s, 1)) rotate(var(--depth-r, 0deg));
+  transition: opacity var(--dur-m) var(--ease-out), transform var(--dur-m) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+[data-reveal][data-depth].is-visible {
+  opacity: 1;
+  transform: translate3d(var(--depth-x, 0), var(--depth-y, 0), 0) scale(var(--depth-s, 1)) rotate(var(--depth-r, 0deg));
+}
+
+/* "How Star answers" only: faster, smaller-throw reveal. Scoped locally via
+   custom-property overrides so no other section's timing changes. Paired
+   with an earlier-triggering IntersectionObserver in motion.js. */
+[data-fast-reveal] {
+  --dur-m: 320ms;
+  --reveal-offset: 10px;
+}
+
+.motion-reduced [data-reveal],
+.motion-reduced [data-reveal-scale] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
+
+.motion-reduced [data-depth] {
+  transform: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal],
+  [data-reveal-scale] {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  [data-depth] {
+    transform: none !important;
+  }
+}
+
+
+/* ------------------------------------------------------------
+   4. NAVIGATION
+   ------------------------------------------------------------ */
+
+#site-nav {
+  background: rgba(246, 244, 239, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--dur-s) var(--ease-out), background var(--dur-s) var(--ease-out);
+}
+
+#site-nav.is-scrolled {
+  border-bottom-color: var(--line);
+}
+
+.nav-link {
+  color: var(--ink-soft);
+  font-weight: 500;
+  transition: color var(--dur-s) var(--ease-out);
+}
+
+.nav-link:hover {
+  color: var(--ink);
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: var(--star-600);
+  color: #fff;
+  font-weight: 600;
+  padding: 0.7rem 1.35rem;
+  border-radius: 999px;
+  box-shadow: 0 6px 20px -6px rgba(22, 111, 201, 0.45);
+  transition: transform var(--dur-s) var(--ease-out), background var(--dur-s) var(--ease-out), box-shadow var(--dur-s) var(--ease-out);
+}
+
+.btn-primary:hover {
+  background: var(--star-700);
+  transform: translateY(-2px) scale(1.015);
+  box-shadow: 0 14px 30px -6px rgba(22, 111, 201, 0.55);
+}
+
+.btn-primary:active {
+  transform: translateY(0) scale(1);
+}
+
+/* Secondary action: outlined, ink-toned — reads as clearly lower-priority
+   than the filled, brand-blue primary button next to it. */
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: var(--ink);
+  font-weight: 600;
+  background: transparent;
+  padding: 0.7rem 1.1rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--line-strong);
+  transition: border-color var(--dur-s) var(--ease-out), background var(--dur-s) var(--ease-out), transform var(--dur-s) var(--ease-out);
+}
+
+.btn-ghost:hover {
+  background: rgba(20, 22, 28, 0.04);
+  border-color: var(--ink-faint);
+  transform: translateY(-1px) scale(1.015);
+}
+
+
+/* ------------------------------------------------------------
+   5. CHAPTER 1 — BOULEVARD COSMOS (HERO)
+   ------------------------------------------------------------ */
+
+.hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(60% 55% at 82% 8%, rgba(20, 22, 28, 0.05), transparent 60%),
+    var(--paper);
+}
+
+.hero-orbit {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0.95;
+  pointer-events: none;
+  /* Sized and positioned per tier below so it holds a healthy, roughly
+     consistent gap from the text column across screen sizes — instead of
+     one right/width pair that overlaps the text on laptops and drifts
+     into the far corner on ultra-wide displays. */
+  right: -4px;
+  width: 176px;
+  height: 176px;
+}
+
+@media (min-width: 1040px) {
+  .hero-orbit {
+    right: 0;
+    width: 280px;
+    height: 280px;
+  }
+}
+
+@media (min-width: 1220px) {
+  .hero-orbit {
+    right: 4%;
+    width: 360px;
+    height: 360px;
+  }
+}
+
+@media (min-width: 1500px) {
+  .hero-orbit {
+    right: 9%;
+    width: 440px;
+    height: 440px;
+  }
+}
+
+/* One restrained accent glow, tied to the single Star-colored node — not a
+   field of ambient blobs, just a quiet hint of where the story is heading. */
+.hero-orbit::before {
+  content: "";
+  position: absolute;
+  left: 70%;
+  top: 70%;
+  width: 40%;
+  height: 40%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(35, 140, 233, 0.16), transparent 70%);
+  filter: blur(4px);
+}
+
+.hero-orbit svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.hero-orbit .orbit-ring {
+  fill: none;
+  stroke: var(--ink);
+  stroke-opacity: 0.14;
+  stroke-width: 1;
+}
+
+.hero-orbit .orbit-ring--faint {
+  stroke-opacity: 0.08;
+}
+
+.hero-orbit .orbit-node {
+  fill: var(--ink);
+  fill-opacity: 0.28;
+}
+
+.hero-orbit .orbit-node--star {
+  fill: var(--star-500);
+  fill-opacity: 0.95;
+}
+
+.hero-orbit .orbit-draw {
+  stroke-dasharray: 900;
+  stroke-dashoffset: 900;
+  transition: stroke-dashoffset 1.4s var(--ease-out);
+}
+
+.hero-orbit.is-visible .orbit-draw {
+  stroke-dashoffset: 0;
+}
+
+.hero-orbit [data-depth] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.hero-caption {
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+  letter-spacing: 0.02em;
+}
+
+.scroll-cue {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.scroll-cue-line {
+  width: 1px;
+  height: 34px;
+  background: linear-gradient(var(--ink-faint), transparent);
+}
+
+
+/* ------------------------------------------------------------
+   6. THRESHOLD (BOULEVARD COSMOS -> STAR)
+   ------------------------------------------------------------ */
+
+#threshold {
+  position: relative;
+  --t: 1;
+  background: color-mix(in srgb, var(--paper) calc((1 - var(--t)) * 100%), #eaf4ff calc(var(--t) * 100%));
+}
+
+/* Faint dot-grid texture, faded out toward the edges so it reads as
+   depth/structure rather than a busy pattern. Purely decorative. */
+.threshold-grid {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(20, 22, 28, 0.16) 1px, transparent 1px);
+  background-size: 28px 28px;
+  background-position: center;
+  -webkit-mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 72%);
+  mask-image: radial-gradient(ellipse 55% 65% at 50% 50%, black 0%, transparent 72%);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+/* One soft ambient glow, tied to --t so it visibly grows as the page moves
+   from Boulevard Cosmos toward Star — motion with a reason, not a blob for
+   its own sake. */
+.threshold-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(46rem, 90vw);
+  height: 22rem;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, rgba(35, 140, 233, calc(var(--t) * 0.16)), transparent 68%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.threshold-frame {
+  position: relative;
+  border: 1px solid rgba(20, 22, 28, 0.08);
+  border-radius: 2rem;
+  padding: 2.75rem 2rem;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 1px 2px rgba(20, 22, 28, 0.03), 0 30px 60px -34px rgba(20, 22, 28, 0.2);
+}
+
+.threshold-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.4rem 0.85rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  color: var(--ink-soft);
+  background: transparent;
+}
+
+/* Plain and static, on purpose — three attempts at animating this tag's
+   fill in sync with scroll position (color-mix, opacity cross-fade,
+   clip-path wipe) all either broke contrast or just looked bad. The card
+   itself already animates in on scroll (data-reveal on .threshold-frame);
+   that's the only motion this section needs. */
+.threshold-tag--star {
+  background: var(--star-600);
+  border-color: var(--star-600);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.threshold-link {
+  color: var(--star-600);
+  flex-shrink: 0;
+}
+
+/* The headline itself is static, sharp copy — no crossfade, no blur, no
+   overlapping text. The tag pills above it are static too now. Only the
+   section's own background tint, the ambient glow, and this spark dot
+   still track scroll progress via --t. */
+.threshold-copy {
+  padding-top: 0.25rem;
+}
+
+.threshold-spark {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--star-500);
+  opacity: var(--t);
+  box-shadow: 0 0 0 8px rgba(35, 140, 233, calc(var(--t) * 0.12));
+}
+
+
+/* ------------------------------------------------------------
+   7. CARD SYSTEM (STAR PRODUCT SURFACES)
+   ------------------------------------------------------------ */
+
+.surface {
+  background: linear-gradient(165deg, #ffffff 0%, #fdfcfa 100%);
+  border: 1px solid var(--line);
+  border-radius: 1.25rem;
+  box-shadow: 0 1px 2px rgba(20, 22, 28, 0.04), 0 18px 40px -22px rgba(20, 22, 28, 0.22);
+}
+
+.surface-header {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+.avatar-garry {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  background: var(--star-600);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.bubble-user {
+  background: var(--ink);
+  color: #fff;
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  max-width: 84%;
+  margin-left: auto;
+}
+
+.bubble-star {
+  background: var(--star-50);
+  color: var(--ink);
+  border-radius: 1rem 1rem 1rem 0.25rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  max-width: 90%;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  color: var(--ink-soft);
+  background: #fff;
+}
+
+.chip--star {
+  border-color: var(--star-200);
+  color: var(--star-700);
+  background: var(--star-50);
+}
+
+.chip--blocked {
+  border-color: rgba(20, 22, 28, 0.12);
+  color: var(--ink-faint);
+  background: var(--paper-raised);
+  text-decoration: line-through;
+  text-decoration-color: rgba(20, 22, 28, 0.28);
+}
+
+.chip--ok::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: var(--star-500);
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  background: #1c9a5b;
+  box-shadow: 0 0 0 3px rgba(28, 154, 91, 0.16);
+}
+
+/* Amber, not green — these are awaiting the viewer's attention, not
+   already resolved, so it shouldn't read as a success/approved state. */
+.pending-dot {
+  width: 7px;
+  height: 7px;
+  margin-top: 0.4rem;
+  border-radius: 999px;
+  background: #b9740a;
+  box-shadow: 0 0 0 3px rgba(185, 116, 10, 0.14);
+  flex-shrink: 0;
+}
+
+
+/* ------------------------------------------------------------
+   8. CHAPTER 2 — INTRODUCING STAR (COMPOSITION)
+   ------------------------------------------------------------ */
+
+#star {
+  background: linear-gradient(180deg, var(--paper) 0%, #f7fafd 18%, #f7fafd 100%);
+}
+
+/* Constrained + centered so the composition doesn't spread to the outer
+   edges of the section on ultra-wide screens, and sized to the cards'
+   actual footprint so there's no dead space below them. */
+.star-stage {
+  position: relative;
+  max-width: 960px;
+  min-height: 510px;
+  margin: 0 auto;
+}
+
+.star-card {
+  position: absolute;
+  width: 280px;
+  max-width: 84vw;
+}
+
+/* The conversation + pending-actions pair sit close together at the top —
+   two independent examples now (not a linked Q&A), so no connector between
+   them. The action/status/document trio cluster tightly just beneath,
+   slightly overlapping, instead of spreading corner to corner. */
+.star-card--conversation { left: 4%; top: 0; z-index: 4; }
+.star-card--pending      { right: 2%; top: 108px; width: 300px; z-index: 3; }
+.star-card--action      { left: 8%; top: 336px; z-index: 5; }
+.star-card--status      { left: 36%; top: 398px; width: 220px; z-index: 6; }
+.star-card--document    { right: 4%; top: 322px; width: 250px; z-index: 2; }
+
+
+/* ------------------------------------------------------------
+   9. CHAPTER 3 — ONE QUESTION, MANY SOURCES
+   ------------------------------------------------------------ */
+
+/* Fast, non-pinned entrance timing lives in [data-fast-reveal] above
+   (section 3) plus the dedicated early-trigger observer in motion.js. */
+
+/* A deliberate dark beat — breaks up what would otherwise be five
+   consecutive near-white sections (hero through "the product"), and gives
+   the governance story ("AI interprets, the backend decides") a richer,
+   more serious backdrop than the light sections either side of it. */
+#grounded {
+  background: linear-gradient(165deg, #123058 0%, #0f2650 55%, #0c1e3f 100%);
+}
+
+.grounded-glow {
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  width: min(30rem, 70vw);
+  height: 22rem;
+  transform: translateY(-50%);
+  background: radial-gradient(circle, rgba(134, 201, 253, 0.16), transparent 70%);
+  filter: blur(10px);
+  pointer-events: none;
+}
+
+.grounded-kicker {
+  color: var(--star-300);
+}
+
+.grounded-heading {
+  color: #ffffff;
+}
+
+.grounded-lede {
+  color: rgba(246, 244, 239, 0.68);
+}
+
+.grounded-caption {
+  color: rgba(246, 244, 239, 0.55);
+}
+
+/* The white answer card needs its own shadow/border treatment here — the
+   usual ink-tinted shadow and border disappear against a dark background,
+   since there's no light backdrop left for them to read against. */
+#grounded .surface {
+  border-color: rgba(255, 255, 255, 0.14);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 30px 60px -20px rgba(0, 0, 0, 0.55);
+}
+
+/* Immediately after the dark section: a crisp, bright beat for contrast. */
+#handled {
+  background: #ffffff;
+}
+
+
+/* ------------------------------------------------------------
+   10. CHAPTER 4 — INTENT TO ACTION (CONFIRM)
+   ------------------------------------------------------------ */
+
+.action-card-state {
+  display: none;
+}
+
+.action-card-state.is-current {
+  display: block;
+}
+
+.confirm-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--star-600);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.55rem 1.1rem;
+  border-radius: 999px;
+  transition: background var(--dur-s) var(--ease-out), transform var(--dur-s) var(--ease-out);
+}
+
+.confirm-btn:hover {
+  background: var(--star-700);
+  transform: translateY(-1px) scale(1.02);
+}
+
+.confirm-btn:active {
+  transform: translateY(0) scale(1);
+}
+
+.confirm-check {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 999px;
+  background: #e8f8ee;
+  color: #1c9a5b;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+/* ------------------------------------------------------------
+   11. CHAPTER 5 — REAL STAR (PRODUCT ANCHOR)
+   ------------------------------------------------------------ */
+
+#product {
+  background: #f8fafc;
+}
+
+.device {
+  width: 244px;
+  max-width: 70vw;
+  background: #16181d;
+  border-radius: 2.4rem;
+  padding: 0.55rem;
+  box-shadow: 0 40px 80px -30px rgba(20, 22, 28, 0.35);
+  margin: 0 auto;
+}
+
+.device-screen {
+  background: #fff;
+  border-radius: 1.9rem;
+  overflow: hidden;
+  aspect-ratio: 9 / 19.5;
+  display: flex;
+  flex-direction: column;
+}
+
+.device-status {
+  height: 2.1rem;
+  flex-shrink: 0;
+}
+
+.capability-card {
+  --accent: var(--star-500);
+  --accent-tint: var(--star-50);
+  border-top: 2px solid var(--accent);
+  transition: box-shadow var(--dur-s) var(--ease-out), transform var(--dur-s) var(--ease-out), border-color var(--dur-s) var(--ease-out);
+}
+
+.capability-card:hover {
+  transform: translateY(-3px) scale(1.012);
+  box-shadow: 0 1px 2px rgba(20, 22, 28, 0.04), 0 26px 52px -18px rgba(20, 22, 28, 0.3);
+}
+
+.capability-card--time { --accent: #0f9488; --accent-tint: #ecfaf8; }
+.capability-card--performance { --accent: #6d5bd0; --accent-tint: #f2f0fc; }
+.capability-card--actions { --accent: #b9740a; --accent-tint: #fbf1de; }
+
+.capability-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.7rem;
+  background: var(--accent-tint);
+  color: var(--accent);
+  margin-bottom: 0.85rem;
+}
+
+
+/* ------------------------------------------------------------
+   12. CHAPTER 6 — STAR + HUMAN EXPERTISE
+   ------------------------------------------------------------ */
+
+#approach {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+#approach .lede {
+  color: rgba(246, 244, 239, 0.66);
+}
+
+.merge-panel {
+  border-radius: 1.5rem;
+  padding: 1.85rem 2.25rem;
+  min-height: 260px;
+}
+
+.merge-panel--star {
+  background: linear-gradient(160deg, rgba(35, 140, 233, 0.16), rgba(35, 140, 233, 0.04));
+  border: 1px solid rgba(35, 140, 233, 0.28);
+}
+
+.merge-panel--human {
+  background: rgba(246, 244, 239, 0.06);
+  border: 1px solid rgba(246, 244, 239, 0.16);
+}
+
+.merge-mark {
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 999px;
+  background: rgba(246, 244, 239, 0.1);
+  border: 1px solid rgba(246, 244, 239, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+  color: var(--paper);
+  flex-shrink: 0;
+}
+
+.merge-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 0.7rem;
+  margin-bottom: 1rem;
+}
+
+.merge-icon--star {
+  background: rgba(35, 140, 233, 0.18);
+  color: var(--star-300);
+}
+
+.merge-icon--human {
+  background: rgba(246, 244, 239, 0.1);
+  color: rgba(246, 244, 239, 0.8);
+}
+
+.merge-list-item {
+  position: relative;
+  padding-left: 1.15rem;
+}
+
+.merge-list-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.5em;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: currentColor;
+  opacity: 0.55;
+}
+
+
+/* ------------------------------------------------------------
+   13. CHAPTER 7 — COMPANY
+   ------------------------------------------------------------ */
+
+#company {
+  background: var(--paper);
+}
+
+.fact-row {
+  border-top: 1px solid var(--line);
+}
+
+
+/* ------------------------------------------------------------
+   14. CHAPTER 8 — CTA
+   ------------------------------------------------------------ */
+
+#contact {
+  background: var(--paper-raised);
+}
+
+
+/* ------------------------------------------------------------
+   15. FOOTER
+   ------------------------------------------------------------ */
+
+footer {
+  background: var(--paper);
+  border-top: 1px solid var(--line);
+}
+
+
+/* ------------------------------------------------------------
+   16. RESPONSIVE
+   ------------------------------------------------------------ */
+
+@media (max-width: 899px) {
+  .hero-orbit {
+    width: 70vw;
+    height: 70vw;
+    top: auto;
+    bottom: -10%;
+    right: -18%;
+    transform: none;
+    opacity: 0.55;
+  }
+
+  .star-stage {
+    min-height: 0;
+  }
+
+  .star-card {
+    position: static;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto 1.1rem auto;
+  }
+
+  .merge-panel {
+    min-height: 0;
+  }
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
 }

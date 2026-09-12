@@ -428,12 +428,17 @@ document.addEventListener("DOMContentLoaded", () => {
           `<div class="absolute -left-2.5 top-0.5 w-5 h-5 rounded-full bg-red-600 flex items-center justify-center text-[10px] text-white font-bold ring-4 ring-slate-900">✕</div>` : 
           `<div class="absolute -left-2.5 top-0.5 w-5 h-5 rounded-full bg-brand-600 flex items-center justify-center text-[10px] text-white font-bold ring-4 ring-slate-900">${idx + 1}</div>`;
 
+        const codeBlock = step.code
+          ? `<pre class="mt-3 p-3 rounded-lg bg-slate-950/60 border border-slate-800/60 overflow-x-auto"><code class="text-[11px] leading-relaxed text-emerald-300/90 font-mono whitespace-pre">${escapeHtml(step.code)}</code></pre>`
+          : "";
+
         stepDiv.innerHTML = `
           ${statusIcon}
           <div class="bg-slate-900/30 border border-slate-800/60 p-5 rounded-xl transition-all duration-300 hover:border-slate-700/60">
             <h5 class="text-sm font-semibold text-slate-200">${step.title}</h5>
             <p class="text-xs text-slate-400 mt-1.5">${step.summary}</p>
             <p class="text-xs text-slate-500 mt-2 leading-relaxed whitespace-pre-line">${step.details}</p>
+            ${codeBlock}
           </div>
         `;
         resultsContainer.appendChild(stepDiv);

@@ -654,10 +654,13 @@ input:focus-visible,
 
 /* The conversation + pending-actions pair sit close together at the top —
    two independent examples now (not a linked Q&A), so no connector between
-   them. The action/status/document trio cluster tightly just beneath,
-   slightly overlapping, instead of spreading corner to corner. */
+   them. The blocked card tucks into the dead space between them, a little
+   behind both, instead of adding a new row and stretching the section. The
+   action/status/document trio cluster tightly just beneath, slightly
+   overlapping, instead of spreading corner to corner. */
 .star-card--conversation { left: 4%; top: 0; z-index: 4; }
 .star-card--pending      { right: 2%; top: 108px; width: 300px; z-index: 3; }
+.star-card--blocked      { left: 34%; top: 64px; width: 270px; z-index: 1; }
 .star-card--action      { left: 8%; top: 336px; z-index: 5; }
 .star-card--status      { left: 36%; top: 398px; width: 220px; z-index: 6; }
 .star-card--document    { right: 4%; top: 322px; width: 250px; z-index: 2; }
